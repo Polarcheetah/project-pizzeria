@@ -1,4 +1,4 @@
-/* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
+/* global utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
   ('use strict');
@@ -99,6 +99,10 @@
       thisProduct.priceElem = thisProduct.element.querySelector(
         select.menuProduct.priceElem
       );
+
+      thisProduct.imageWrapper = thisProduct.element.querySelector(
+        select.menuProduct.imageWrapper
+      );
     }
 
     initAccordion() {
@@ -113,7 +117,7 @@
           select.all.menuProductsActive
         );
         /* if there is active product and it's not thisProduct.element, remove class active from it */
-        if (activeProduct && !(activeProduct === thisProduct.element)) {
+        if (activeProduct && activeProduct !== thisProduct.element) {
           activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
         }
         /* toggle active class on thisProduct.element */
@@ -174,6 +178,18 @@
             price += option.price;
           } else if (!optionSelected && option.default) {
             price -= option.price;
+          }
+
+          const optionImage = thisProduct.imageWrapper.querySelector(
+            `.${paramId}-${optionId}`
+          );
+
+          if (optionImage) {
+            if (optionSelected) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            } else {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
           }
         }
       }
