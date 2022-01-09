@@ -12,6 +12,7 @@ class AmountWidget extends BaseWidget {
     thisWidget.getElements(element);
     //thisWidget.renderValue();
     thisWidget.initActions();
+    thisWidget.setValue();
   }
 
   getElements() {
