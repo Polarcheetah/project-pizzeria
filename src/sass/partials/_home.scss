@@ -1,0 +1,147 @@
+.home-page {
+  transform: opacity 500ms;
+
+  &.loading {
+    opacity: 0.25;
+  }
+}
+
+.home-page-wrapper {
+  margin: ($base-size * 3.5) auto;
+  padding: ($base-size * 6) ($base-size * 4);
+  background: $color-light;
+  border-bottom: 1px solid lighten($color-dark, 70%);
+  border-radius: $radius;
+}
+
+.home-nav {
+  display: flex;
+}
+
+.btn-nav {
+  flex: 1 0 0;
+}
+
+.btn-nav a img {
+  min-width: 150px;
+  height: 100px;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+  vertical-align: middle;
+  border-radius: 3px;
+}
+
+.btn-nav:first-of-type {
+  margin-right: 7px;
+}
+
+.btn-nav a {
+  position: relative;
+}
+
+.btn-nav a p {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  text-decoration: none;
+  z-index: 2;
+  width: 80%;
+  text-align: center;
+}
+
+.btn-nav a p:first-of-type {
+  top: -5px;
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.btn-nav a p:last-of-type {
+  top: 45px;
+  font-size: 14px;
+  visibility: hidden;
+}
+
+.btn-nav a:hover p:first-of-type {
+  top: -20px;
+  transition: top 1s;
+}
+
+.btn-nav a:hover p:last-of-type {
+  top: 20px;
+  transition: top 1s;
+  visibility: visible;
+}
+
+.info {
+  background: $color-main;
+  border-radius: 3px;
+  color: #fff;
+  text-transform: uppercase;
+  margin-top: 7px;
+  // min-height: 100px;
+  margin-bottom: 20px;
+}
+
+.info h2 {
+  margin: 0;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.info p {
+  margin: 0;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.main-carousel {
+  font-size: 20px;
+  margin: 80px 0;
+}
+
+.carousel-cell {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.carousel-cell img {
+  flex: 1 0 0;
+  min-width: 100px;
+  min-height: 200px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  //overflow: hidden;
+  vertical-align: middle;
+}
+
+.carousel-cell .opinion {
+  flex: 2 0 0;
+  padding: 0 30px;
+}
+
+.carousel-cell .opinion h3 {
+  font-size: 18px;
+}
+
+.carousel-cell .opinion p {
+  font-size: 14px;
+}
+
+.photo {
+  position: relative;
+}
+
+.photo i {
+  position: absolute;
+  color: red;
+  font-size: 20px;
+  z-index: 2;
+  //width: 100%;
+  text-align: center;
+}

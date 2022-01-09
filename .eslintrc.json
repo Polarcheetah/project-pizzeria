@@ -17,6 +17,7 @@
       "no-prototype-builtins": "warn"
     },
     "globals": {
-      "Handlebars": "readonly"
+      "Handlebars": "readonly",
+      "Flickity": "readonly"
     }
   }

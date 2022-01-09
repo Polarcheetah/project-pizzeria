@@ -13,6 +13,17 @@ class Booking {
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
+    thisBooking.submitDisable();
+  }
+
+  submitDisable() {
+    const thisBooking = this;
+
+    if (thisBooking.targetTableId === '') {
+      thisBooking.dom.submitButton.setAttribute('disabled', true);
+    } else {
+      thisBooking.dom.submitButton.removeAttribute('disabled');
+    }
   }
 
   getData() {
@@ -172,6 +183,7 @@ class Booking {
         thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)
       ) {
         table.classList.add(classNames.booking.tableBooked);
+        table.classList.remove(classNames.booking.tableSelected);
       } else {
         table.classList.remove(classNames.booking.tableBooked);
       }
@@ -251,7 +263,7 @@ class Booking {
         option.type === 'checkbox' &&
         option.name === 'starter'
       ) {
-        console.log('option value:', option.value);
+        //console.log('option value:', option.value);
         if (option.checked && !payload.starters.includes(option)) {
           payload.starters.push(option.value);
         }
@@ -262,7 +274,15 @@ class Booking {
       }
     }
 
-    //console.log('payload new', payload);
+    if (
+      payload.starters.includes('bread') &&
+      !payload.starters.includes('water')
+    ) {
+      payload.starters.unshift('water');
+    }
+
+    console.log('payload', payload);
+    console.log('starters', payload.starters);
 
     const options = {
       method: 'POST',
@@ -272,22 +292,29 @@ class Booking {
       body: JSON.stringify(payload),
     };
 
-    fetch(url, options)
-      .then(function (rawResponse) {
-        return rawResponse.json();
-      })
-      .then(function (parsedResponse) {
-        console.log('parsedResponse', parsedResponse);
-      })
-      .then(function () {
-        thisBooking.makeBooked(
-          payload.date,
-          payload.hour,
-          payload.duration,
-          payload.table
-        );
-        console.log('thisBooking.booked:', thisBooking.booked);
-      });
+    if (payload.table !== null) {
+      fetch(url, options)
+        .then(function (rawResponse) {
+          return rawResponse.json();
+        })
+        .then(function (parsedResponse) {
+          console.log('parsedResponse', parsedResponse);
+        })
+        .then(function () {
+          thisBooking.makeBooked(
+            payload.date,
+            payload.hour,
+            payload.duration,
+            payload.table
+          );
+          console.log('thisBooking.booked:', thisBooking.booked);
+        })
+        .then(function () {
+          thisBooking.updateDOM();
+        });
+    } else {
+      window.alert('Please select table');
+    }
   }
 
   render(element) {
@@ -323,11 +350,16 @@ class Booking {
     thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(
       select.booking.form
     );
+
+    thisBooking.dom.submitButton = thisBooking.dom.form.querySelector(
+      select.booking.submitButton
+    );
+
     thisBooking.dom.bookingOptions = thisBooking.dom.wrapper.querySelectorAll(
       select.booking.checkbox
     );
 
-    console.log('booking options:', thisBooking.dom.bookingOptions);
+    //console.log('booking options:', thisBooking.dom.bookingOptions);
   }
 
   initWidgets() {
@@ -358,6 +390,7 @@ class Booking {
     thisBooking.dom.tablesWrapper.addEventListener('click', function (event) {
       event.preventDefault();
       thisBooking.initTables(event);
+      thisBooking.submitDisable();
     });
 
     thisBooking.dom.form.addEventListener('submit', function (event) {
