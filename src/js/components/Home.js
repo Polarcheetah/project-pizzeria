@@ -17,13 +17,13 @@ class Home {
     thisHome.dom.wrapper = element;
     thisHome.dom.wrapper.innerHTML = generatedHTML;
 
-    /*thisBooking.dom.peopleAmount = thisBooking.dom.wrapper.querySelector(
-      select.booking.peopleAmount
-    );*/
-
     thisHome.dom.carouselElement = thisHome.dom.wrapper.querySelector(
       classNames.home.carousel
     );
+  }
+
+  initWidgets() {
+    const thisHome = this;
 
     thisHome.dom.carouselObject = new Flickity(thisHome.dom.carouselElement, {
       cellAlign: 'left',
@@ -31,8 +31,6 @@ class Home {
       autoPlay: true,
     });
   }
-
-  initWidgets() {}
 }
 
 export default Home;

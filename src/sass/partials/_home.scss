@@ -29,7 +29,7 @@
   object-fit: cover;
   overflow: hidden;
   vertical-align: middle;
-  border-radius: 3px;
+  border-radius: $radius;
 }
 
 .btn-nav:first-of-type {
@@ -79,7 +79,7 @@
 
 .info {
   background: $color-main;
-  border-radius: 3px;
+  border-radius: $radius;
   color: #fff;
   text-transform: uppercase;
   margin-top: 7px;
@@ -133,15 +133,80 @@
   font-size: 14px;
 }
 
-.photo {
-  position: relative;
+.gallery {
+  margin-bottom: 30px;
 }
 
-.photo i {
+.row {
+  display: flex;
+}
+
+.photo {
+  flex: 1 0 0;
+  position: relative;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.photo:last-of-type {
+  margin-right: 0;
+}
+
+.photo:hover::after {
+  visibility: visible;
+}
+.photo:hover a {
+  visibility: visible;
+  font-size: 24px;
+  transition: font-size 0.5s ease-out;
+}
+
+.photo::after {
   position: absolute;
-  color: red;
-  font-size: 20px;
+  top: 0;
+  left: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background: $color-dark;
+  opacity: 0.4;
+  visibility: hidden;
+}
+
+.photo img {
+  min-width: 150px;
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+  vertical-align: middle;
+  border-radius: $radius;
+}
+
+.photo a {
+  position: absolute;
+  color: #fff;
+  font-size: 0;
   z-index: 2;
-  //width: 100%;
-  text-align: center;
+  visibility: hidden;
+}
+
+.photo a:hover {
+  color: $color-main;
+}
+
+.photo a:first-of-type {
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+}
+
+.photo a:last-of-type {
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+}
+
+.footer a {
+  color: $color-main;
 }
