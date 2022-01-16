@@ -2,12 +2,14 @@ import { settings, select } from '../settings.js';
 import BaseWidget from './BaseWidget.js';
 
 class AmountWidget extends BaseWidget {
-  constructor(element) {
+  constructor(element, step, decimalAccuracy, minValue, maxValue) {
     super(element, settings.amountWidget.defaultValue);
     const thisWidget = this;
 
-    //console.log('AmountWidget:', thisWidget);
-    //console.log('constructor arguments:', element);
+    thisWidget.step = step;
+    thisWidget.decimalAccuracy = decimalAccuracy;
+    thisWidget.minValue = minValue;
+    thisWidget.maxValue = maxValue;
 
     thisWidget.getElements(element);
     //thisWidget.renderValue();
@@ -30,11 +32,25 @@ class AmountWidget extends BaseWidget {
   }
 
   isValid(value) {
+    const thisWidget = this;
     return (
       !isNaN(value) &&
-      value >= settings.amountWidget.defaultMin &&
-      value <= settings.amountWidget.defaultMax
+      value >= thisWidget.minValue &&
+      value <= thisWidget.maxValue
     );
+  }
+
+  parseValue(value) {
+    const thisWidget = this;
+    let parsedValue = 1;
+
+    if (thisWidget.decimalAccuracy == 0) {
+      parsedValue = parseInt(value);
+    } else {
+      parsedValue = parseFloat(value);
+      console.log('parsed float', parsedValue);
+    }
+    return parsedValue;
   }
 
   renderValue() {
@@ -52,12 +68,18 @@ class AmountWidget extends BaseWidget {
 
     thisWidget.dom.linkDecrease.addEventListener('click', function (event) {
       event.preventDefault();
-      thisWidget.setValue(thisWidget.value - 1);
+      console.log(thisWidget.value);
+      if (thisWidget.value > thisWidget.minValue) {
+        thisWidget.setValue(thisWidget.value - thisWidget.step);
+      }
     });
 
     thisWidget.dom.linkIncrease.addEventListener('click', function (event) {
       event.preventDefault();
-      thisWidget.setValue(thisWidget.value + 1);
+      console.log(thisWidget.value);
+      if (thisWidget.value < thisWidget.maxValue) {
+        thisWidget.setValue(thisWidget.value + thisWidget.step);
+      }
     });
   }
 }

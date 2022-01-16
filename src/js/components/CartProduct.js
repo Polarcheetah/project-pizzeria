@@ -1,4 +1,4 @@
-import { select } from '../settings.js';
+import { select, settings } from '../settings.js';
 import AmountWidget from './AmountWidget.js';
 
 class CartProduct {
@@ -42,7 +42,11 @@ class CartProduct {
     const thisCartProduct = this;
 
     thisCartProduct.amountWidget = new AmountWidget(
-      thisCartProduct.dom.amountWidget
+      thisCartProduct.dom.amountWidget,
+      1,
+      0,
+      settings.amountWidget.defaultMin,
+      settings.amountWidget.defaultMax
     );
 
     thisCartProduct.dom.amountWidget.addEventListener('updated', function () {

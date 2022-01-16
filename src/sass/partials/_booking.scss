@@ -228,3 +228,9 @@
   @include flex(row, flex-start, space-between);
   margin: ($base-size * 4) auto;
 }
+
+.hours-amount input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

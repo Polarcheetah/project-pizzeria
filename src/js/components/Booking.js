@@ -9,11 +9,17 @@ class Booking {
     const thisBooking = this;
 
     thisBooking.targetTableId = '';
-
+    thisBooking.maxDuration = settings.amountWidget.defaultMax;
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
     thisBooking.submitDisable();
+  }
+
+  resetHoursWidget() {
+    const thisBooking = this;
+
+    thisBooking.hoursAmount.value = settings.amountWidget.defaultValue;
   }
 
   submitDisable() {
@@ -24,6 +30,43 @@ class Booking {
     } else {
       thisBooking.dom.submitButton.removeAttribute('disabled');
     }
+  }
+
+  CalcMaxDuration() {
+    const thisBooking = this;
+    let maxDuration = 0;
+
+    let date = thisBooking.datePicker.value;
+    const startHour = utils.hourToNumber(thisBooking.hourPicker.value);
+
+    //console.log('startHour', startHour);
+    //console.log('date', date);
+
+    let tableId = thisBooking.parseValue(thisBooking.targetTableId);
+    console.log(tableId);
+
+    // console.log('booked tables:', thisBooking.booked);
+
+    if (tableId != null) {
+      while (
+        (typeof thisBooking.booked[thisBooking.date] === 'undefined' ||
+          typeof thisBooking.booked[date][startHour + maxDuration] ===
+            'undefined' ||
+          !thisBooking.booked[date][startHour + maxDuration].includes(
+            tableId
+          )) &&
+        maxDuration < settings.hours.close - startHour
+      ) {
+        maxDuration += 0.5;
+        //console.log('maxDuration', maxDuration);
+      }
+    } else {
+      maxDuration = settings.hours.close - startHour;
+    }
+    //console.log('thisBooking.targetTableId', thisBooking.targetTableId);
+    //console.log('maxDuration', maxDuration);
+    thisBooking.hoursAmount.maxValue = maxDuration;
+    return maxDuration;
   }
 
   getData() {
@@ -362,25 +405,52 @@ class Booking {
     //console.log('booking options:', thisBooking.dom.bookingOptions);
   }
 
+  checkHoursAmountWidget() {
+    const thisBooking = this;
+    console.log(
+      'thisBooking.hoursAmount.dom.input.value',
+      thisBooking.hoursAmount.dom.input.value
+    );
+    if (
+      thisBooking.hoursAmount.dom.input.value >= thisBooking.CalcMaxDuration()
+    ) {
+      //window.alert('Maximum number of hours selected');
+      console.log('Maximum number of hours selected');
+    }
+  }
+
   initWidgets() {
     const thisBooking = this;
 
-    thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
-    thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
+    thisBooking.peopleAmount = new AmountWidget(
+      thisBooking.dom.peopleAmount,
+      1,
+      0,
+      settings.amountWidget.defaultMin,
+      settings.amountWidget.defaultMax
+    );
+    thisBooking.hoursAmount = new AmountWidget(
+      thisBooking.dom.hoursAmount,
+      0.5,
+      1,
+      settings.amountWidget.defaultMin,
+      settings.amountWidget.defaultMax
+    );
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
-    thisBooking.dom.peopleAmount.addEventListener('updated', function (event) {
-      thisBooking.initTables(event);
-    });
-    thisBooking.dom.hoursAmount.addEventListener('updated', function (event) {
-      thisBooking.initTables(event);
+    console.log('thisBooking.hoursAmount', thisBooking.hoursAmount);
+
+    thisBooking.dom.peopleAmount.addEventListener('updated', function () {});
+    thisBooking.dom.hoursAmount.addEventListener('updated', function () {
+      thisBooking.checkHoursAmountWidget();
     });
     thisBooking.dom.datePicker.addEventListener('updated', function (event) {
       thisBooking.initTables(event);
     });
     thisBooking.dom.hourPicker.addEventListener('updated', function (event) {
       thisBooking.initTables(event);
+      thisBooking.checkHoursAmountWidget();
     });
 
     thisBooking.dom.wrapper.addEventListener('updated', function () {
@@ -390,6 +460,8 @@ class Booking {
     thisBooking.dom.tablesWrapper.addEventListener('click', function (event) {
       event.preventDefault();
       thisBooking.initTables(event);
+      thisBooking.resetHoursWidget();
+      thisBooking.checkHoursAmountWidget();
       thisBooking.submitDisable();
     });
 

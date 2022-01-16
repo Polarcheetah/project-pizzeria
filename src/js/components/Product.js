@@ -1,4 +1,4 @@
-import { select, templates, classNames } from '../settings.js';
+import { select, templates, classNames, settings } from '../settings.js';
 import utils from '../utils.js';
 import AmountWidget from './AmountWidget.js';
 
@@ -163,7 +163,11 @@ class Product {
     const thisProduct = this;
 
     thisProduct.amountWidget = new AmountWidget(
-      thisProduct.dom.amountWidgetElem
+      thisProduct.dom.amountWidgetElem,
+      1,
+      0,
+      settings.amountWidget.defaultMin,
+      settings.amountWidget.defaultMax
     );
     thisProduct.dom.amountWidgetElem.addEventListener('updated', function () {
       thisProduct.processOrder();
